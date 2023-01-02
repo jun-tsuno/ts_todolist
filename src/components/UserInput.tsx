@@ -65,7 +65,7 @@ const UserInput = ({ addTodo }: Props) => {
 						</div>
 						<div className="w-30">
 							<DesktopDatePicker
-								label="Date desktop"
+								label="Deadline..."
 								inputFormat="MM/DD/YYYY"
 								disablePast
 								value={date}
