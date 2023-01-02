@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -37,12 +37,19 @@ const EditTask = ({ taskName, deadline, handleEditDone }: Props) => {
 		<LocalizationProvider dateAdapter={AdapterDayjs}>
 			<div className="text-left ml-5 flex-[80%] min-w-[200px]">
 				<div className="flex">
-					<input
-						className="text-xl p-1 break-words border-2 rounded-md border-sky-600 mr-8"
-						placeholder={taskName}
-						onChange={handleTaskChange}
-						value={editedTask}
-					/>
+					<div className="mr-8">
+						<TextField
+							id="outlined-basic"
+							label="Task..."
+							variant="outlined"
+							placeholder={taskName}
+							onChange={handleTaskChange}
+							value={editedTask}
+							focused
+							color="secondary"
+							autoComplete="off"
+						/>
+					</div>
 					<div>
 						<DesktopDatePicker
 							label="Deadline..."
@@ -50,13 +57,15 @@ const EditTask = ({ taskName, deadline, handleEditDone }: Props) => {
 							disablePast
 							value={editedDate}
 							onChange={handleDateChange}
-							renderInput={(params) => <TextField {...params} focused />}
+							renderInput={(params) => (
+								<TextField {...params} color="secondary" focused />
+							)}
 						/>
 					</div>
 				</div>
 			</div>
 			<div className="flex-[20%] my-auto">
-				<Button variant="contained" onClick={handleSubmit}>
+				<Button variant="contained" onClick={handleSubmit} color="secondary">
 					UPDATE
 				</Button>
 			</div>

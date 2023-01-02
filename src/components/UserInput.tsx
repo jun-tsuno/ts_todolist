@@ -5,8 +5,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Button from "@mui/material/Button";
 import { Task } from "../types/types";
-import { CustomTextField } from "../style/customMui";
+import TextField from "@mui/material/TextField";
 import { v4 as uuidv4 } from "uuid";
+import { CustomTextField } from "../style/customMui";
 
 interface Props {
 	addTodo(newTodo: Task): void;
@@ -22,7 +23,7 @@ const UserInput = ({ addTodo }: Props) => {
 		setTask(event.target.value);
 	};
 
-	const handleDateChange = (newDate: Dayjs | null) => {
+	const handleDateChange = (newDate: Dayjs | any) => {
 		const stringifiedDate = newDate?.format("MM-DD-YYYY");
 		setDate(stringifiedDate);
 	};
@@ -53,7 +54,7 @@ const UserInput = ({ addTodo }: Props) => {
 				>
 					<div className="flex-[80%] flex justify-around">
 						<div className="w-[500px]">
-							<CustomTextField
+							<TextField
 								id="outlined-basic"
 								label="Task..."
 								value={task}
@@ -82,8 +83,7 @@ const UserInput = ({ addTodo }: Props) => {
 							variant="outlined"
 							size="large"
 							sx={{
-								color: "white",
-								border: "2px solid white",
+								border: "2px solid",
 								fontSize: "15px",
 								height: "50px",
 							}}
