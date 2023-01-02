@@ -40,12 +40,19 @@ const TaskCard = ({ todo, deleteTodo, doneTodo, editTodo }: Props) => {
 							handleEditDone={handleEditDone}
 						/>
 					) : (
-						<div className="text-left ml-5 flex-[80%] min-w-[200px]">
-							<h3 className="text-2xl break-words text-[#ee6055]">
-								{todo.taskName}
-							</h3>
-							<span>Deadline: {todo.deadline}</span>
-						</div>
+						<>
+							<div className="text-left ml-5 flex-[80%] min-w-[200px]">
+								<h3 className="text-2xl break-words text-[#ee6055]">
+									{todo.taskName}
+								</h3>
+								<span>Deadline: {todo.deadline}</span>
+							</div>
+							{todo.isDone && (
+								<div className="my-auto px-2 mr-10 border border-2 rounded-md text-[#55a630] border-[#55a630]">
+									DONE
+								</div>
+							)}
+						</>
 					)}
 					<div className="flex-[20%] flex justify-center items-center">
 						{!isEditing && (
