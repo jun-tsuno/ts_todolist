@@ -1,10 +1,10 @@
-## Simple ToDo List App with TypeScript
+Simple ToDo List App with TypeScript
 
-# App Demo
+App Demo
 
 https://basic-ts-todoapp.netlify.app
 
-## Build With
+Build With
 
 - React
 - TypeScript
