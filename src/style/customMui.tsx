@@ -31,7 +31,5 @@ export const Card = styled(Paper, {
 	color: theme.palette.text.secondary,
 	lineHeight: "40px",
 	padding: "10px",
-	...(isDone && {
-		backgroundColor: "#b7e4c7",
-	}),
+	border: isDone ? "3px solid #b7e4c7" : "",
 }));
