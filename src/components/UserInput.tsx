@@ -1,19 +1,17 @@
 import { ChangeEvent, FormEvent, useState } from "react";
+import useTodo from "../hooks/useTodo";
+import { Task } from "../types/types";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Button from "@mui/material/Button";
-import { Task } from "../types/types";
 import TextField from "@mui/material/TextField";
 import { v4 as uuidv4 } from "uuid";
 import { CustomTextField } from "../style/customMui";
 
-interface Props {
-	addTodo(newTodo: Task): void;
-}
-
-const UserInput = ({ addTodo }: Props) => {
+const UserInput = () => {
+	const { addTodo } = useTodo();
 	const [task, setTask] = useState<string>("");
 	const [date, setDate] = useState<string | undefined>(
 		dayjs().format("MM/DD/YYYY")

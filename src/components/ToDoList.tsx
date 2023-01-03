@@ -1,24 +1,10 @@
+import useTodo from "../hooks/useTodo";
 import TaskCard from "./TaskCard";
-import { Task } from "../types/types";
 
-interface Props {
-	todos: Task[];
-	deleteTodo(id: string): void;
-	doneTodo(id: string): void;
-	editTodo(id: string, taskName: string, taskDeadline: string): void;
-}
-
-const ToDoList = ({ todos, deleteTodo, doneTodo, editTodo }: Props) => {
+const ToDoList = () => {
+	const { todos } = useTodo();
 	const tasks = todos.map((todo) => {
-		return (
-			<TaskCard
-				key={todo.id}
-				todo={todo}
-				deleteTodo={deleteTodo}
-				doneTodo={doneTodo}
-				editTodo={editTodo}
-			/>
-		);
+		return <TaskCard key={todo.id} todo={todo} />;
 	});
 	return <>{tasks}</>;
 };

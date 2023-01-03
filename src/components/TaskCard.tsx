@@ -1,7 +1,8 @@
 import { useState } from "react";
+import useTodo from "../hooks/useTodo";
 import EditTask from "./EditTask";
-import { Card } from "../style/customMui";
 import { Task } from "../types/types";
+import { Card } from "../style/customMui";
 import IconButton from "@mui/material/IconButton";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -12,12 +13,10 @@ import { green } from "@mui/material/colors";
 
 interface Props {
 	todo: Task;
-	deleteTodo(id: string): void;
-	doneTodo(id: string): void;
-	editTodo(id: string, taskName: string, taskDeadline: string): void;
 }
 
-const TaskCard = ({ todo, deleteTodo, doneTodo, editTodo }: Props) => {
+const TaskCard = ({ todo }: Props) => {
+	const { deleteTodo, editTodo, doneTodo } = useTodo();
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 
 	const handleEdit = (id: string) => {
