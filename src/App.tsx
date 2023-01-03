@@ -1,54 +1,22 @@
 import { useState } from "react";
+import useTodo from "./hooks/useTodo";
 import UserInput from "./components/UserInput";
 import ToDoList from "./components/ToDoList";
-import { Task } from "./types/types";
+import { darkTheme, lightTheme } from "./style/customMui";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
-import { darkTheme, lightTheme } from "./style/customMui";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const App = () => {
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-	const [todos, setTodos] = useState<Task[]>([]);
 	const [isDark, setIsDark] = useState<boolean>(prefersDarkMode);
+	const { todos } = useTodo();
 
-	const addTodo = (newTodo: Task): void => {
-		setTodos([...todos, newTodo]);
-	};
-
-	const deleteTodo = (taskId: string): void => {
-		const newTodos = todos.filter((todo) => {
-			return todo.id !== taskId;
-		});
-		setTodos(newTodos);
-	};
-
-	const doneTodo = (taskId: string): void => {
-		const newTodos = todos.filter((todo) => {
-			if (todo.id === taskId) {
-				todo.isDone = !todo.isDone;
-			}
-			return todo;
-		});
-		setTodos(newTodos);
-	};
-
-	const editTodo = (
-		taskId: string,
-		newTaskName: string,
-		newDeadline: string
-	): void => {
-		const newTodos = todos.filter((todo) => {
-			if (todo.id === taskId) {
-				todo.taskName = newTaskName;
-				todo.deadline = newDeadline;
-			}
-			return todo;
-		});
-		setTodos(newTodos);
+	const handleTheme = () => {
+		setIsDark(!isDark);
 	};
 
 	let taskToBeDone = 0;
@@ -57,10 +25,6 @@ const App = () => {
 			taskToBeDone++;
 		}
 	});
-
-	const handleTheme = () => {
-		setIsDark(!isDark);
-	};
 
 	return (
 		<ThemeProvider theme={isDark ? darkTheme : lightTheme}>
@@ -93,18 +57,13 @@ const App = () => {
 					</div>
 					<div>
 						<div className="text-center py-10">
-							<UserInput addTodo={addTodo} />
+							<UserInput />
 						</div>
 						<div>
 							{todos.length === 0 ? (
 								<h2 className="text-3xl text-center my-10">All Tasks Done!!</h2>
 							) : (
-								<ToDoList
-									todos={todos}
-									deleteTodo={deleteTodo}
-									doneTodo={doneTodo}
-									editTodo={editTodo}
-								/>
+								<ToDoList />
 							)}
 						</div>
 					</div>
