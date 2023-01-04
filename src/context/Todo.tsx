@@ -1,63 +1,55 @@
-import { createContext, useState } from "react";
+import { Dispatch, createContext, useReducer } from "react";
 import { Task, TodoContextType } from "../types/types";
+import todoReducer from "../reducers/todoReducer";
+import { TodoAction } from "../types/types";
+import {
+	addTodo,
+	deleteTodo,
+	doneTodo,
+	editTodo,
+} from "../actions/todoActions";
+import produce from "immer";
 
 export const TodoContext = createContext<TodoContextType>({
 	todos: [],
-	setTodos: () => {},
-	addTodo: () => {},
-	deleteTodo: () => {},
-	doneTodo: () => {},
-	editTodo: () => {},
+	handleAddTodo: (): any => {},
+	handleDeleteTodo: () => {},
+	handleDoneTodo: () => {},
+	handleEditTodo: () => {},
 });
 
-export const TodoProvider = ({ children }: any) => {
-	const [todos, setTodos] = useState<Task[]>([]);
+export const TodoProvider = ({ children }: any): JSX.Element => {
+	// const [todos, setTodos] = useState<Task[]>([]);
+	const [todos, dispatch] = useReducer(produce(todoReducer), []);
 
-	const addTodo = (newTodo: Task): void => {
-		setTodos([...todos, newTodo]);
+	const handleAddTodo = (newTodo: Task): any => {
+		dispatch(addTodo(newTodo));
 	};
 
-	const deleteTodo = (taskId: string) => {
-		const newTodos = todos.filter((todo) => {
-			return todo.id !== taskId;
-		});
-		setTodos(newTodos);
+	const handleDeleteTodo = (taskId: string) => {
+		dispatch(deleteTodo(taskId));
 	};
 
-	const doneTodo = (taskId: string): void => {
-		const newTodos = todos.filter((todo) => {
-			if (todo.id === taskId) {
-				todo.isDone = !todo.isDone;
-			}
-			return todo;
-		});
-		setTodos(newTodos);
+	const handleDoneTodo = (taskId: string) => {
+		dispatch(doneTodo(taskId));
 	};
 
-	const editTodo = (
+	const handleEditTodo = (
 		taskId: string,
 		newTaskName: string,
 		newDeadline: string
-	): void => {
-		const newTodos = todos.filter((todo) => {
-			if (todo.id === taskId) {
-				todo.taskName = newTaskName;
-				todo.deadline = newDeadline;
-			}
-			return todo;
-		});
-		setTodos(newTodos);
+	) => {
+		dispatch(editTodo(taskId, newTaskName, newDeadline));
 	};
 
 	return (
 		<TodoContext.Provider
 			value={{
 				todos,
-				setTodos,
-				addTodo,
-				deleteTodo,
-				doneTodo,
-				editTodo,
+				handleAddTodo,
+				handleDeleteTodo,
+				handleDoneTodo,
+				handleEditTodo,
 			}}
 		>
 			{children}

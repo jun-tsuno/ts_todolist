@@ -16,7 +16,7 @@ interface Props {
 }
 
 const TaskCard = ({ todo }: Props) => {
-	const { deleteTodo, editTodo, doneTodo } = useTodo();
+	const { handleDeleteTodo, handleEditTodo, handleDoneTodo } = useTodo();
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 
 	const handleEdit = (id: string) => {
@@ -24,7 +24,7 @@ const TaskCard = ({ todo }: Props) => {
 	};
 
 	const handleEditDone = (taskName: string, taskDeadline: string) => {
-		editTodo(todo.id, taskName, taskDeadline);
+		handleEditTodo(todo.id, taskName, taskDeadline);
 		setIsEditing(false);
 	};
 
@@ -59,10 +59,10 @@ const TaskCard = ({ todo }: Props) => {
 								<IconButton onClick={() => handleEdit(todo.id)}>
 									<BorderColorIcon sx={{ color: blue[500] }} />
 								</IconButton>
-								<IconButton onClick={() => doneTodo(todo.id)}>
+								<IconButton onClick={() => handleDoneTodo(todo.id)}>
 									<CheckCircleIcon sx={{ color: green[500] }} />
 								</IconButton>
-								<IconButton onClick={() => deleteTodo(todo.id)}>
+								<IconButton onClick={() => handleDeleteTodo(todo.id)}>
 									<DeleteForeverIcon sx={{ color: pink[600] }} />
 								</IconButton>
 							</>
