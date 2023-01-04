@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import { CustomTextField } from "../style/customMui";
 
 const UserInput = () => {
-	const { addTodo } = useTodo();
+	const { handleAddTodo } = useTodo();
 	const [task, setTask] = useState<string>("");
 	const [date, setDate] = useState<string | undefined>(
 		dayjs().format("MM/DD/YYYY")
@@ -37,7 +37,7 @@ const UserInput = () => {
 				deadline: date,
 				isDone: false,
 			};
-			addTodo(newTask);
+			handleAddTodo(newTask);
 			setTask("");
 			setDate(dayjs().format("MM/DD/YYYY"));
 		}

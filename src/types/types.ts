@@ -7,9 +7,21 @@ export interface Task {
 
 export interface TodoContextType {
 	todos: Task[];
-	setTodos(newTodo: Task[]): void;
-	addTodo(newTodo: Task): void;
-	deleteTodo(taskId: string): void;
-	doneTodo(taskId: string): void;
-	editTodo(taskId: string, newTaskName: string, newDeadline: string): void;
+	handleAddTodo(newTodo: Task): { type: string; payload: Task };
+	handleDeleteTodo(taskId: string): void;
+	handleDoneTodo(taskId: string): void;
+	handleEditTodo(
+		taskId: string,
+		newTaskName: string,
+		newDeadline: string
+	): void;
 }
+
+export type TodoAction =
+	| { type: "ADD_TODO"; payload: Task }
+	| { type: "DELETE_TODO"; payload: string }
+	| { type: "DONE_TODO"; payload: string }
+	| {
+			type: "EDIT_TODO";
+			payload: { taskId: string; newTaskName: string; newDeadline: string };
+	  };
