@@ -13,29 +13,23 @@ const todoReducer = (todos: Task[], action: TodoAction): Task[] => {
 			return [...newTodoDelete];
 
 		case "DONE_TODO":
-			for (let i = 0; i < todos.length; i++) {
-				if (todos[i].id === action.payload) {
-					todos[i].isDone = !todos[i].isDone;
+			const newTodoDone = todos.filter((todo) => {
+				if (todo.id === action.payload) {
+					todo.isDone = !todo.isDone;
 				}
-			}
-			return todos;
+				return todo;
+			});
+			return [...newTodoDone];
 
 		case "EDIT_TODO":
-			// const newTodoEdit = todos.filter((todo) => {
-			// 	if (todo.id === action.payload.taskId) {
-			// 		todo.taskName = action.payload.newTaskName;
-			// 		todo.deadline = action.payload.newDeadline;
-			// 	}
-			// 	return todo;
-			// });
-			// return [...newTodoEdit];
-			for (let i = 0; i < todos.length; i++) {
-				if (todos[i].id === action.payload.taskId) {
-					todos[i].taskName = action.payload.newTaskName;
-					todos[i].deadline = action.payload.newDeadline;
+			const newTodoEdit = todos.filter((todo) => {
+				if (todo.id === action.payload.taskId) {
+					todo.taskName = action.payload.newTaskName;
+					todo.deadline = action.payload.newDeadline;
 				}
-			}
-			return todos;
+				return todo;
+			});
+			return [...newTodoEdit];
 		default:
 			return todos;
 	}

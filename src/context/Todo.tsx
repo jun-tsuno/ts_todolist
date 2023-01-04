@@ -1,14 +1,12 @@
-import { Dispatch, createContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 import { Task, TodoContextType } from "../types/types";
 import todoReducer from "../reducers/todoReducer";
-import { TodoAction } from "../types/types";
 import {
 	addTodo,
 	deleteTodo,
 	doneTodo,
 	editTodo,
 } from "../actions/todoActions";
-import produce from "immer";
 
 export const TodoContext = createContext<TodoContextType>({
 	todos: [],
@@ -19,8 +17,7 @@ export const TodoContext = createContext<TodoContextType>({
 });
 
 export const TodoProvider = ({ children }: any): JSX.Element => {
-	// const [todos, setTodos] = useState<Task[]>([]);
-	const [todos, dispatch] = useReducer(produce(todoReducer), []);
+	const [todos, dispatch] = useReducer(todoReducer, []);
 
 	const handleAddTodo = (newTodo: Task): any => {
 		dispatch(addTodo(newTodo));
