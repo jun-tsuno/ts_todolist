@@ -13,7 +13,7 @@ const todoReducer = (todos: Task[], action: TodoAction): Task[] => {
 			return [...newTodoDelete];
 
 		case "DONE_TODO":
-			const newTodoDone = todos.filter((todo) => {
+			const newTodoDone = todos.map((todo) => {
 				if (todo.id === action.payload) {
 					todo.isDone = !todo.isDone;
 				}

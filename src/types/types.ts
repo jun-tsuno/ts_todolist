@@ -25,3 +25,4 @@ export type TodoAction =
 			type: "EDIT_TODO";
 			payload: { taskId: string; newTaskName: string; newDeadline: string };
 	  };
+	  setData(data.filter((item) => item.id !== id));
