@@ -17,6 +17,8 @@ export interface TodoContextType {
 	): void;
 }
 
+export interface UserContextType {}
+
 export type TodoAction =
 	| { type: "ADD_TODO"; payload: Task }
 	| { type: "DELETE_TODO"; payload: string }
