@@ -1,4 +1,4 @@
-import { UserCredential } from "firebase/auth";
+import { User, Auth, UserCredential } from "firebase/auth";
 
 export interface Task {
 	id: string;
@@ -20,9 +20,8 @@ export interface TodoContextType {
 }
 
 export interface UserContextType {
-	user: {};
-	setUser(value: object): void;
-	// signIn(email: string, password: string): Promise<UserCredential>;
+	user: User | null;
+	signIn(email: string, password: string): Promise<UserCredential>;
 }
 
 export type TodoAction =

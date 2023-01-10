@@ -1,43 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-// import { app } from "../App";
-
-import { FirebaseError } from "firebase/app";
-// import { app } from "../../firebase";
-// import { FirebaseError } from "firebase/app";
 import { UserAuth } from "../context/AuthContext";
-import { auth } from "../../firebase";
 
 const SignIn = () => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<boolean>(false);
-	const { setUser } = UserAuth();
+	const { signIn } = UserAuth();
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		// try {
-		// 	await signIn(email, password);
-		// } catch (error: unknown) {
-		// 	if (error instanceof FirebaseError) {
-		// 		console.log(error.message);
-		// 	}
-		// 	return;
-		// }
-		await signInWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				const user = userCredential.user;
-				setUser(user);
-				console.log("hello");
-			})
-			.catch((error) => {
-				console.log("hoge2");
-				console.log(error);
-
-				setError(true);
-			});
+		try {
+			await signIn(email, password);
+			console.log("success");
+		} catch (error) {
+			console.log(error);
+			setError(false);
+		}
 	};
 
 	return (

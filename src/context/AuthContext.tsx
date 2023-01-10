@@ -1,6 +1,11 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { UserContextType } from "../types/types";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import {
+	signInWithEmailAndPassword,
+	onAuthStateChanged,
+	User,
+	Auth,
+} from "firebase/auth";
 import { auth } from "../../firebase";
 
 export const UserContext = createContext<UserContextType>(
@@ -8,14 +13,12 @@ export const UserContext = createContext<UserContextType>(
 );
 
 export const AuthContextProvider = ({ children }: any): JSX.Element => {
-	const [user, setUser] = useState<object>({});
+	const [user, setUser] = useState<User | null>(null);
 	console.log(user);
 
-	// const signIn = (email: string, password: string) => {
-	// 	console.log("here");
-
-	// 	return signInWithEmailAndPassword(auth, email, password);
-	// };
+	const signIn = async (email: string, password: string) => {
+		return signInWithEmailAndPassword(auth, email, password);
+	};
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -28,7 +31,7 @@ export const AuthContextProvider = ({ children }: any): JSX.Element => {
 	}, []);
 
 	return (
-		<UserContext.Provider value={{ user, setUser }}>
+		<UserContext.Provider value={{ user, signIn }}>
 			{children}
 		</UserContext.Provider>
 	);
