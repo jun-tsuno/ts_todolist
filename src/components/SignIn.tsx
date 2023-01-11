@@ -6,7 +6,7 @@ const SignIn = () => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<boolean>(false);
-	const { signIn } = UserAuth();
+	const { signIn, user } = UserAuth();
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -14,6 +14,7 @@ const SignIn = () => {
 		try {
 			await signIn(email, password);
 			console.log("success");
+			console.log(`hello, ${user!.email}`);
 		} catch (error) {
 			console.log(error);
 			setError(false);
