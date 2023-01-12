@@ -8,7 +8,7 @@ const SignIn = () => {
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>("");
-	const { signIn, user } = UserAuth();
+	const { signIn } = UserAuth();
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -8,15 +8,7 @@ import {
 	signOut,
 } from "firebase/auth";
 import { auth, db } from "../../firebase";
-import {
-	collection,
-	getDocs,
-	doc,
-	DocumentReference,
-	DocumentData,
-	where,
-	query,
-} from "firebase/firestore";
+import { collection, getDocs, where, query } from "firebase/firestore";
 
 export const UserContext = createContext<UserContextType>(
 	{} as UserContextType
@@ -46,20 +38,16 @@ export const AuthContextProvider = ({ children }: any): JSX.Element => {
 			const fetchUserTodos = async () => {
 				// currentUser === undefinedを除外
 				if (currentUser) {
-					// const querySnapshot = await getDocs(
-					// 	collection(db, `todos/${currentUser.uid}`)
-					// );
-					// // loginしたuserがdocumentを保持していればそれを返す
-					// if (querySnapshot) {
-					// 	console.log(querySnapshot);
-					// }
-					// console.log("no doc");
+					// サブコレクションに保存されているtodo{}の中で現在ログイン中のユーザーIDが付与されてる
+					// タスクオブジェクトのみを抽出。
 					const q = query(
-						collection(db, `todos/${currentUser.uid}`),
+						collection(db, `todos/${currentUser.uid}/todo`),
 						where("userId", "==", currentUser.uid)
 					);
 					const querySnapshot = await getDocs(q);
-					console.log(querySnapshot);
+					querySnapshot.forEach((doc) => {
+						console.log(doc.id, "=>", doc.data());
+					});
 				}
 			};
 			fetchUserTodos();
