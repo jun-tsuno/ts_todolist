@@ -1,13 +1,30 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserAuth } from "../context/AuthContext";
+import { FirebaseError } from "firebase/app";
 
 const SignUp = () => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<boolean>(false);
+	const [errorMessage, setErrorMessage] = useState<string>("");
+	const { signUp } = UserAuth();
+	const navigate = useNavigate();
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
+		try {
+			await signUp(email, password);
+			console.log("done!");
+			navigate("/home");
+		} catch (error) {
+			if (error instanceof FirebaseError) {
+				console.log(error);
+				setError(true);
+				setErrorMessage(error.message);
+			}
+		}
 	};
 
 	return (
@@ -43,7 +60,7 @@ const SignUp = () => {
 				</button>
 				{error && (
 					<div className="text-center bg-red-400 text-white p-4 border rounded-md ">
-						***ERROR*** :: {error}
+						***ERROR*** :: {errorMessage}
 					</div>
 				)}
 			</form>

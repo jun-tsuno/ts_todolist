@@ -6,17 +6,32 @@ import { darkTheme, lightTheme } from "../style/customMui";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
+import { Button } from "@mui/material";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { UserAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 	const [isDark, setIsDark] = useState<boolean>(prefersDarkMode);
 	const { todos } = useTodo();
+	const { logOut } = UserAuth();
+	const navigate = useNavigate();
 
 	const handleTheme = () => {
 		setIsDark(!isDark);
+	};
+
+	const handleLogOut = async () => {
+		try {
+			await logOut();
+			navigate("/");
+		} catch (error) {
+			console.log(error);
+			alert("Logout Error!");
+		}
 	};
 
 	let taskToBeDone = 0;
@@ -50,10 +65,13 @@ const Home = () => {
 							)}
 						</div>
 						{taskToBeDone !== 0 && (
-							<h2 className="ml-auto mr-8 text-xl">
-								{taskToBeDone} Tasks Left...
-							</h2>
+							<h2 className="ml-auto text-xl">{taskToBeDone} Tasks Left...</h2>
 						)}
+						<div className="ml-auto mr-8">
+							<Button variant="contained" onClick={handleLogOut}>
+								Log Out
+							</Button>
+						</div>
 					</div>
 					<div>
 						<div className="text-center py-10">

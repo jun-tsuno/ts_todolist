@@ -22,6 +22,8 @@ export interface TodoContextType {
 export interface UserContextType {
 	user: User | null;
 	signIn(email: string, password: string): Promise<UserCredential>;
+	signUp(email: string, password: string): Promise<UserCredential>;
+	logOut(): void;
 }
 
 export type TodoAction =

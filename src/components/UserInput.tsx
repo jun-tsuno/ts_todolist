@@ -9,6 +9,15 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { v4 as uuidv4 } from "uuid";
 import { CustomTextField } from "../style/customMui";
+import {
+	setDoc,
+	doc,
+	serverTimestamp,
+	addDoc,
+	collection,
+} from "firebase/firestore";
+import { db } from "../../firebase";
+import { UserAuth } from "../context/AuthContext";
 
 const UserInput = () => {
 	const { handleAddTodo } = useTodo();
@@ -16,6 +25,7 @@ const UserInput = () => {
 	const [date, setDate] = useState<string | undefined>(
 		dayjs().format("MM/DD/YYYY")
 	);
+	const { user } = UserAuth();
 
 	const handleTaskChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setTask(event.target.value);
@@ -24,6 +34,16 @@ const UserInput = () => {
 	const handleDateChange = (newDate: Dayjs | any) => {
 		const stringifiedDate = newDate?.format("MM-DD-YYYY");
 		setDate(stringifiedDate);
+	};
+
+	const handleAddToDoc = async (newTask: Task) => {
+		try {
+			await addDoc(collection(db, `todos/${user!.uid}`, newTask.id), {
+				...newTask,
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -37,7 +57,10 @@ const UserInput = () => {
 				deadline: date,
 				isDone: false,
 			};
+			console.log(newTask.id);
+
 			handleAddTodo(newTask);
+			handleAddToDoc(newTask);
 			setTask("");
 			setDate(dayjs().format("MM/DD/YYYY"));
 		}
