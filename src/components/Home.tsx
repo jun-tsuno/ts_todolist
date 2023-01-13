@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useTodo from "../hooks/useTodo";
 import UserInput from "../components/UserInput";
 import ToDoList from "../components/ToDoList";
@@ -16,9 +16,18 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 	const [isDark, setIsDark] = useState<boolean>(prefersDarkMode);
-	const { todos } = useTodo();
-	const { logOut } = UserAuth();
+	const { todos, handleAddTodo } = useTodo();
+	const { logOut, fetchedData } = UserAuth();
 	const navigate = useNavigate();
+
+	console.log(fetchedData);
+
+	useEffect(() => {
+		const renderData = async () => {
+			await handleAddTodo(fetchedData);
+		};
+		renderData();
+	}, []);
 
 	const handleTheme = () => {
 		setIsDark(!isDark);

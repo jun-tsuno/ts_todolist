@@ -35,7 +35,6 @@ const UserInput = () => {
 	const handleAddToDoc = async (newTask: Task) => {
 		try {
 			await addDoc(collection(db, `todos/${user!.uid}/todo`), {
-				userId: user!.uid,
 				...newTask,
 			});
 		} catch (error) {
@@ -50,6 +49,7 @@ const UserInput = () => {
 		} else {
 			const newTask: Task = {
 				id: uuidv4(),
+				userId: user!.uid,
 				taskName: task,
 				deadline: date,
 				isDone: false,

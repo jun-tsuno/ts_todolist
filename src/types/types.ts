@@ -1,7 +1,9 @@
 import { User, Auth, UserCredential } from "firebase/auth";
+import { DocumentData } from "firebase/firestore";
 
 export interface Task {
 	id: string;
+	userId: string;
 	taskName: string;
 	deadline: string | undefined;
 	isDone: boolean;
@@ -24,6 +26,7 @@ export interface UserContextType {
 	signIn(email: string, password: string): Promise<UserCredential>;
 	signUp(email: string, password: string): Promise<UserCredential>;
 	logOut(): void;
+	fetchedData: any;
 }
 
 export type TodoAction =

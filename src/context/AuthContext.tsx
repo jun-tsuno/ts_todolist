@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { UserContextType } from "../types/types";
+import { UserContextType, Task } from "../types/types";
 import {
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
@@ -8,7 +8,14 @@ import {
 	signOut,
 } from "firebase/auth";
 import { auth, db } from "../../firebase";
-import { collection, getDocs, where, query } from "firebase/firestore";
+import {
+	collection,
+	getDocs,
+	where,
+	query,
+	DocumentData,
+} from "firebase/firestore";
+import useTodo from "../hooks/useTodo";
 
 export const UserContext = createContext<UserContextType>(
 	{} as UserContextType
@@ -16,6 +23,9 @@ export const UserContext = createContext<UserContextType>(
 
 export const AuthContextProvider = ({ children }: any): JSX.Element => {
 	const [user, setUser] = useState<User | null>(null);
+	const [fetchedData, setFetchedData] = useState<DocumentData>({});
+
+	console.log(fetchedData);
 
 	const signIn = async (email: string, password: string) => {
 		return await signInWithEmailAndPassword(auth, email, password);
@@ -32,7 +42,6 @@ export const AuthContextProvider = ({ children }: any): JSX.Element => {
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
 			setUser(currentUser);
-			console.log(currentUser?.uid);
 
 			// dbに保存されている前回迄のtodoを取得
 			const fetchUserTodos = async () => {
@@ -44,10 +53,16 @@ export const AuthContextProvider = ({ children }: any): JSX.Element => {
 						collection(db, `todos/${currentUser.uid}/todo`),
 						where("userId", "==", currentUser.uid)
 					);
-					const querySnapshot = await getDocs(q);
-					querySnapshot.forEach((doc) => {
-						console.log(doc.id, "=>", doc.data());
+					const querySnapshot = await getDocs(q).then((documents) => {
+						documents.forEach((doc) => {
+							setFetchedData(doc.data());
+						});
 					});
+					// console.log(querySnapshot);
+
+					// await querySnapshot.forEach((doc) => {
+					// 	setFetchedData(doc.data());
+					// });
 				}
 			};
 			fetchUserTodos();
@@ -55,10 +70,10 @@ export const AuthContextProvider = ({ children }: any): JSX.Element => {
 		return () => {
 			unsubscribe();
 		};
-	}, []);
+	}, [user]);
 
 	return (
-		<UserContext.Provider value={{ user, signIn, signUp, logOut }}>
+		<UserContext.Provider value={{ user, signIn, signUp, logOut, fetchedData }}>
 			{children}
 		</UserContext.Provider>
 	);
