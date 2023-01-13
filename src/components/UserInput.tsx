@@ -54,8 +54,6 @@ const UserInput = () => {
 				deadline: date,
 				isDone: false,
 			};
-			console.log(newTask.id);
-
 			handleAddTodo(newTask);
 			handleAddToDoc(newTask);
 			setTask("");

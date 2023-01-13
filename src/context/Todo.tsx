@@ -1,7 +1,6 @@
-import { Dispatch, createContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 import { Task, TodoContextType } from "../types/types";
 import todoReducer from "../reducers/todoReducer";
-import { TodoAction } from "../types/types";
 import {
 	addTodo,
 	deleteTodo,

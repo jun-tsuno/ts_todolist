@@ -13,13 +13,11 @@ const SignIn = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-
 		try {
 			await signIn(email, password);
 			navigate("/home");
 		} catch (error: unknown) {
 			if (error instanceof FirebaseError) {
-				console.log(error);
 				setError(true);
 				setErrorMessage(error.message);
 			}

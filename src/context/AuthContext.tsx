@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { UserContextType, Task } from "../types/types";
+import { UserContextType } from "../types/types";
 import {
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
@@ -7,15 +7,7 @@ import {
 	User,
 	signOut,
 } from "firebase/auth";
-import { auth, db } from "../../firebase";
-import {
-	collection,
-	getDocs,
-	where,
-	query,
-	DocumentData,
-} from "firebase/firestore";
-import useTodo from "../hooks/useTodo";
+import { auth } from "../../firebase";
 
 export const UserContext = createContext<UserContextType>(
 	{} as UserContextType
@@ -23,9 +15,6 @@ export const UserContext = createContext<UserContextType>(
 
 export const AuthContextProvider = ({ children }: any): JSX.Element => {
 	const [user, setUser] = useState<User | null>(null);
-	const [fetchedData, setFetchedData] = useState<DocumentData>({});
-
-	console.log(fetchedData);
 
 	const signIn = async (email: string, password: string) => {
 		return await signInWithEmailAndPassword(auth, email, password);
@@ -40,37 +29,13 @@ export const AuthContextProvider = ({ children }: any): JSX.Element => {
 	};
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+		onAuthStateChanged(auth, (currentUser) => {
 			setUser(currentUser);
-
-			// dbに保存されている前回迄のtodoを取得
-			const fetchUserTodos = async () => {
-				// currentUser === undefinedを除外
-				if (currentUser) {
-					// サブコレクションに保存されているtodo{}の中で現在ログイン中のユーザーIDが付与されてる
-					// タスクオブジェクトのみを抽出。
-					const q = query(
-						collection(db, `todos/${currentUser.uid}/todo`),
-						where("userId", "==", currentUser.uid)
-					);
-					const querySnapshot = await getDocs(q);
-
-					console.log(querySnapshot);
-
-					querySnapshot.forEach((doc) => {
-						setFetchedData((prev) => [...prev, doc.data()]);
-					});
-				}
-			};
-			fetchUserTodos();
 		});
-		return () => {
-			unsubscribe();
-		};
-	}, [user]);
+	}, []);
 
 	return (
-		<UserContext.Provider value={{ user, signIn, signUp, logOut, fetchedData }}>
+		<UserContext.Provider value={{ user, signIn, signUp, logOut }}>
 			{children}
 		</UserContext.Provider>
 	);
