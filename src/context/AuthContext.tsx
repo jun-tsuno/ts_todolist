@@ -53,16 +53,13 @@ export const AuthContextProvider = ({ children }: any): JSX.Element => {
 						collection(db, `todos/${currentUser.uid}/todo`),
 						where("userId", "==", currentUser.uid)
 					);
-					const querySnapshot = await getDocs(q).then((documents) => {
-						documents.forEach((doc) => {
-							setFetchedData(doc.data());
-						});
-					});
-					// console.log(querySnapshot);
+					const querySnapshot = await getDocs(q);
 
-					// await querySnapshot.forEach((doc) => {
-					// 	setFetchedData(doc.data());
-					// });
+					console.log(querySnapshot);
+
+					querySnapshot.forEach((doc) => {
+						setFetchedData((prev) => [...prev, doc.data()]);
+					});
 				}
 			};
 			fetchUserTodos();
