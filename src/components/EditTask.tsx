@@ -10,9 +10,15 @@ interface Props {
 	taskName: string;
 	deadline: string | undefined;
 	handleEditDone(taskName: string, taskDeadline: string): void;
+	handleEditData(taskName: string, taskDeadline: string): void;
 }
 
-const EditTask = ({ taskName, deadline, handleEditDone }: Props) => {
+const EditTask = ({
+	taskName,
+	deadline,
+	handleEditDone,
+	handleEditData,
+}: Props) => {
 	const [editedTask, setEditedTask] = useState<string>("");
 	const [editedDate, setEditedDate] = useState<string | undefined>(deadline);
 
@@ -30,6 +36,7 @@ const EditTask = ({ taskName, deadline, handleEditDone }: Props) => {
 			alert("Fill in Both fields.");
 		} else {
 			handleEditDone(editedTask, editedDate);
+			handleEditData(editedTask, editedDate);
 		}
 	};
 

@@ -18,6 +18,7 @@ import {
 	doc,
 	getDocs,
 	query,
+	updateDoc,
 	where,
 } from "firebase/firestore";
 
@@ -44,10 +45,39 @@ const TaskCard = ({ todo }: Props) => {
 			collection(db, `todos/${user!.uid}/todo`),
 			where("id", "==", id)
 		);
-
+		// 削除するドキュメントのIDを取得する為、taskIdから該当ドキュメントのIDを取得する。
 		const querySnapshot = await getDocs(q);
 		const deleteItemId = querySnapshot.docs[0].id;
 		await deleteDoc(doc(db, `todos/${user!.uid}/todo/${deleteItemId}`));
+	};
+
+	const handleDoneData = async (id: string) => {
+		const q = query(
+			collection(db, `todos/${user!.uid}/todo`),
+			where("id", "==", id)
+		);
+
+		const querySnapshot = await getDocs(q);
+		const targetItemId = querySnapshot.docs[0].id;
+
+		await updateDoc(doc(db, `todos/${user!.uid}/todo/${targetItemId}`), {
+			isDone: !todo.isDone,
+		});
+	};
+
+	const handleEditData = async (taskName: string, taskDeadline: string) => {
+		const q = query(
+			collection(db, `todos/${user!.uid}/todo`),
+			where("id", "==", todo.id)
+		);
+
+		const querySnapshot = await getDocs(q);
+		const targetItemId = querySnapshot.docs[0].id;
+
+		await updateDoc(doc(db, `todos/${user!.uid}/todo/${targetItemId}`), {
+			taskName: taskName,
+			deadline: taskDeadline,
+		});
 	};
 
 	return (
@@ -59,6 +89,7 @@ const TaskCard = ({ todo }: Props) => {
 							taskName={todo.taskName}
 							deadline={todo.deadline}
 							handleEditDone={handleEditDone}
+							handleEditData={handleEditData}
 						/>
 					) : (
 						<>
@@ -81,7 +112,12 @@ const TaskCard = ({ todo }: Props) => {
 								<IconButton onClick={() => handleEdit(todo.id)}>
 									<BorderColorIcon sx={{ color: blue[500] }} />
 								</IconButton>
-								<IconButton onClick={() => handleDoneTodo(todo.id)}>
+								<IconButton
+									onClick={() => {
+										handleDoneTodo(todo.id);
+										handleDoneData(todo.id);
+									}}
+								>
 									<CheckCircleIcon sx={{ color: green[500] }} />
 								</IconButton>
 								<IconButton
