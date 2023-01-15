@@ -18,7 +18,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 const Home = () => {
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 	const [isDark, setIsDark] = useState<boolean>(prefersDarkMode);
-	const { todos, handleAddTodo } = useTodo();
+	const { todos, handleAddTodo, handleReset } = useTodo();
 	const { user, logOut } = UserAuth();
 	const navigate = useNavigate();
 
@@ -44,6 +44,8 @@ const Home = () => {
 		fetchUserTodos();
 	}, [user]);
 
+	console.log(todos);
+
 	const handleTheme = () => {
 		setIsDark(!isDark);
 	};
@@ -51,6 +53,8 @@ const Home = () => {
 	const handleLogOut = async () => {
 		try {
 			await logOut();
+			handleReset();
+			console.log(todos);
 			navigate("/");
 		} catch (error) {
 			alert("Logout Error!");

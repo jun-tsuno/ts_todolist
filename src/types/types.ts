@@ -18,6 +18,7 @@ export interface TodoContextType {
 		newTaskName: string,
 		newDeadline: string
 	): void;
+	handleReset(): void;
 }
 
 export interface UserContextType {
@@ -34,4 +35,5 @@ export type TodoAction =
 	| {
 			type: "EDIT_TODO";
 			payload: { taskId: string; newTaskName: string; newDeadline: string };
-	  };
+	  }
+	| { type: "RESET_TODO" };
