@@ -44,8 +44,6 @@ const Home = () => {
 		fetchUserTodos();
 	}, [user]);
 
-	console.log(todos);
-
 	const handleTheme = () => {
 		setIsDark(!isDark);
 	};
@@ -54,7 +52,6 @@ const Home = () => {
 		try {
 			await logOut();
 			handleReset();
-			console.log(todos);
 			navigate("/");
 		} catch (error) {
 			alert("Logout Error!");

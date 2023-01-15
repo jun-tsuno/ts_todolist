@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useTodo from "../hooks/useTodo";
+import { UserAuth } from "../context/AuthContext";
 import EditTask from "./EditTask";
 import { Task } from "../types/types";
 import { Card } from "../style/customMui";
@@ -10,6 +11,15 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { blue } from "@mui/material/colors";
 import { pink } from "@mui/material/colors";
 import { green } from "@mui/material/colors";
+import { db } from "../../firebase";
+import {
+	collection,
+	deleteDoc,
+	doc,
+	getDocs,
+	query,
+	where,
+} from "firebase/firestore";
 
 interface Props {
 	todo: Task;
@@ -18,6 +28,7 @@ interface Props {
 const TaskCard = ({ todo }: Props) => {
 	const { handleDeleteTodo, handleEditTodo, handleDoneTodo } = useTodo();
 	const [isEditing, setIsEditing] = useState<boolean>(false);
+	const { user } = UserAuth();
 
 	const handleEdit = (id: string) => {
 		todo.id === id && setIsEditing(true);
@@ -26,6 +37,17 @@ const TaskCard = ({ todo }: Props) => {
 	const handleEditDone = (taskName: string, taskDeadline: string) => {
 		handleEditTodo(todo.id, taskName, taskDeadline);
 		setIsEditing(false);
+	};
+
+	const handleDeleteData = async (id: string) => {
+		const q = query(
+			collection(db, `todos/${user!.uid}/todo`),
+			where("id", "==", id)
+		);
+
+		const querySnapshot = await getDocs(q);
+		const deleteItemId = querySnapshot.docs[0].id;
+		await deleteDoc(doc(db, `todos/${user!.uid}/todo/${deleteItemId}`));
 	};
 
 	return (
@@ -62,7 +84,12 @@ const TaskCard = ({ todo }: Props) => {
 								<IconButton onClick={() => handleDoneTodo(todo.id)}>
 									<CheckCircleIcon sx={{ color: green[500] }} />
 								</IconButton>
-								<IconButton onClick={() => handleDeleteTodo(todo.id)}>
+								<IconButton
+									onClick={() => {
+										handleDeleteTodo(todo.id);
+										handleDeleteData(todo.id);
+									}}
+								>
 									<DeleteForeverIcon sx={{ color: pink[600] }} />
 								</IconButton>
 							</>
