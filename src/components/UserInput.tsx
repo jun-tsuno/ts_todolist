@@ -9,13 +9,17 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { v4 as uuidv4 } from "uuid";
 import { CustomTextField } from "../style/customMui";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../firebase";
+import { UserAuth } from "../context/AuthContext";
 
 const UserInput = () => {
-	const { handleAddTodo } = useTodo();
 	const [task, setTask] = useState<string>("");
 	const [date, setDate] = useState<string | undefined>(
 		dayjs().format("MM/DD/YYYY")
 	);
+	const { handleAddTodo } = useTodo();
+	const { user } = UserAuth();
 
 	const handleTaskChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setTask(event.target.value);
@@ -26,6 +30,18 @@ const UserInput = () => {
 		setDate(stringifiedDate);
 	};
 
+	// : todosコレ >> user別のdoc >> todoサブコレ >> 新規doc
+	// userIdを追加することで、サブコレからクエリでID別の検索を可能にする。
+	const handleAddToDoc = async (newTask: Task) => {
+		try {
+			await addDoc(collection(db, `todos/${user!.uid}/todo`), {
+				...newTask,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		if (task === "" || date === undefined) {
@@ -33,11 +49,13 @@ const UserInput = () => {
 		} else {
 			const newTask: Task = {
 				id: uuidv4(),
+				userId: user!.uid,
 				taskName: task,
 				deadline: date,
 				isDone: false,
 			};
 			handleAddTodo(newTask);
+			handleAddToDoc(newTask);
 			setTask("");
 			setDate(dayjs().format("MM/DD/YYYY"));
 		}

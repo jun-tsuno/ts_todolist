@@ -36,6 +36,9 @@ const todoReducer = (todos: Task[], action: TodoAction): Task[] => {
 				}
 			}
 			return todos;
+		case "RESET_TODO":
+			return [];
+
 		default:
 			return todos;
 	}

@@ -1,5 +1,8 @@
+import { User, UserCredential } from "firebase/auth";
+
 export interface Task {
 	id: string;
+	userId: string;
 	taskName: string;
 	deadline: string | undefined;
 	isDone: boolean;
@@ -15,6 +18,14 @@ export interface TodoContextType {
 		newTaskName: string,
 		newDeadline: string
 	): void;
+	handleReset(): void;
+}
+
+export interface UserContextType {
+	user: User | null;
+	signIn(email: string, password: string): Promise<UserCredential>;
+	signUp(email: string, password: string): Promise<UserCredential>;
+	logOut(): void;
 }
 
 export type TodoAction =
@@ -24,4 +35,5 @@ export type TodoAction =
 	| {
 			type: "EDIT_TODO";
 			payload: { taskId: string; newTaskName: string; newDeadline: string };
-	  };
+	  }
+	| { type: "RESET_TODO" };

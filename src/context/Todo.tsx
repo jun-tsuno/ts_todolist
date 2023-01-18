@@ -1,12 +1,12 @@
-import { Dispatch, createContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 import { Task, TodoContextType } from "../types/types";
 import todoReducer from "../reducers/todoReducer";
-import { TodoAction } from "../types/types";
 import {
 	addTodo,
 	deleteTodo,
 	doneTodo,
 	editTodo,
+	resetTodo,
 } from "../actions/todoActions";
 import produce from "immer";
 
@@ -16,6 +16,7 @@ export const TodoContext = createContext<TodoContextType>({
 	handleDeleteTodo: () => {},
 	handleDoneTodo: () => {},
 	handleEditTodo: () => {},
+	handleReset: () => {},
 });
 
 export const TodoProvider = ({ children }: any): JSX.Element => {
@@ -42,6 +43,10 @@ export const TodoProvider = ({ children }: any): JSX.Element => {
 		dispatch(editTodo(taskId, newTaskName, newDeadline));
 	};
 
+	const handleReset = () => {
+		dispatch(resetTodo());
+	};
+
 	return (
 		<TodoContext.Provider
 			value={{
@@ -50,6 +55,7 @@ export const TodoProvider = ({ children }: any): JSX.Element => {
 				handleDeleteTodo,
 				handleDoneTodo,
 				handleEditTodo,
+				handleReset,
 			}}
 		>
 			{children}

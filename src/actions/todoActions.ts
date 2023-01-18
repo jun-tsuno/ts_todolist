@@ -31,3 +31,9 @@ export const editTodo = (
 		payload: { taskId, newTaskName, newDeadline },
 	};
 };
+
+export const resetTodo = (): any => {
+	return {
+		type: "RESET_TODO",
+	};
+};
