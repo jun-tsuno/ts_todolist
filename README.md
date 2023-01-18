@@ -4,7 +4,7 @@ Simple ToDo List App with TypeScript
 
 - React
 - TypeScript
-- Firebase
+- Firebase(Authentication, FireStore)
 - tailwindcss
 - MUI
 - Vite
