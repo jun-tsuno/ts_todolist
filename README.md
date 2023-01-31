@@ -1,4 +1,8 @@
-Simple ToDo List App with TypeScript
+### Simple ToDo List App with TypeScript & Firebase
+
+## Demo
+
+https://ts-todolist-r4rmdj09b-jun-tsuno.vercel.app
 
 ## Build With
 
@@ -8,6 +12,12 @@ Simple ToDo List App with TypeScript
 - tailwindcss
 - MUI
 - Vite
+
+## Challenges
+
+- This is my first project with Firebase, and it was tough to understand how the Firebase storage stores data and how to retrieve the data form components at first. I gained a basic understanding of how to connect a database with CRUD functionality, as well as how to handle asynchronous data fetching.
+
+- By adding 'Dark Mode' in this app, I also learned how to override the MaterialUI default styling. It strengthens my understanding of the usage and customization of the UI components.
 
 ## App Overview
 
